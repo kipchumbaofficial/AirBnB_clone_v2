@@ -1,12 +1,27 @@
 #!/usr/bin/python3
 '''Deploy archive
 '''
-from fabric.api import env, run, put
+from fabric.api import env, run, put, local
 import os
-
+from datetime import datetime
 env.user = 'ubuntu'
 env.key_file = '~/.ssh/id_rsa'
 env.hosts = ['107.22.144.84', '52.86.231.250']
+
+
+def do_pack():
+    '''A function to archive a directory
+    '''
+    if not os.path.exists('versions'):
+        local('mkdir versions')
+    date_time = datetime.now().strftime('%Y%m%d%H%M%S')
+    archive_name = f'web_static_{date_time}'
+    archive = local(f'tar -czvf versions/{archive_name}.tgz web_static')
+
+    if archive.succeeded:
+        return 'versions/{archive_name}'
+    else:
+        return None
 
 
 def do_deploy(archive_path):
