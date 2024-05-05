@@ -23,5 +23,8 @@ def do_deploy(archive_path):
         run(f'mv {target_dir}/web_static/* {target_dir}')
         run('rm /data/web_static/current')
         run(f'ln -s {target_dir}/ /data/web_static/current')
+
+        print("New version deployed!")
+
         return True
     return False
